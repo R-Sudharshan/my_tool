@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Enumeration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2f2f2f;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            margin-top: 20px;
+            width: 100%;
+            color: #fff;
+        }
+
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+            color: #fff;
+        }
+
+        th {
+            background-color: #007bff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+
+        a {
+            color: #fff;
+        }
+
+        a:hover {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Directory Enumeration</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="target_url">Enter Target URL:</label>
+                <input type="text" name="target_url" id="target_url" class="form-control" placeholder="http://example.com" required>
+            </div>
+            <div class="form-group">  
+                <label for="wordlist_file">Choose Wordlist File:</label>
+                <input type="file" name="wordlist_file" id="wordlist_file" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Run Enumeration</button>
+        </form>
+
+        <hr>
+
+        <!-- Display Results -->
+        {% if result_output %}
+            <div>
+                <h3>Directory Enumeration Results:</h3>
+                {% if result_output|length > 0 %}
+                    <p>Total Directories Found: {{ total_directories }}</p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Path</th>
+                                <th>Status</th>
+                                <th>Complete URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in result_output %}
+                                <tr>
+                                    <td>{{ result.path }}</td>
+                                    <td>{{ result.status }}</td>
+                                    <td><a href="{{ result.complete_url }}" target="_blank">{{ result.complete_url }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="alert alert-warning">No valid results found. Please try again with a different wordlist or target URL.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

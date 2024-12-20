@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH Brute Force</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">SSH Brute Force</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="target_ip">Target IP Address:</label>
+                <input type="text" class="form-control" name="target_ip" id="target_ip" placeholder="Enter target IP" required>
+            </div>
+            <div class="form-group">
+                <label for="username_file">Username File:</label>
+                <input type="file" class="form-control-file" name="username_file" id="username_file" required>
+            </div>
+            <div class="form-group">
+                <label for="password_file">Password File:</label>
+                <input type="file" class="form-control-file" name="password_file" id="password_file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Start Brute Force</button>
+        </form>
+
+        {% if result_output %}
+            <hr>
+            <h3>Brute Force Results:</h3>
+            <ul>
+                {% for result in result_output %}
+                    <li>{{ result }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

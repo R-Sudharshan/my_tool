@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quata Tech Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2f2f2f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #4CAF50;
+            width: 50%;
+            margin-right: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+        .result-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        .result-table th, .result-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .result-table th {
+            background-color: #333;
+        }
+        .result-table tr:nth-child(even) {
+            background-color: #444;
+        }
+        .result-table tr:hover {
+            background-color: #555;
+        }
+        .result-table td ul {
+            padding-left: 20px;
+        }
+        .loading {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+        .action-buttons a {
+            display: block;
+            width: 180px;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-dnsenumeration { background-color: #17a2b8; }
+        .btn-direnumeration { background-color: blueviolet; }
+        .btn-enumeration:hover { background-color: #138496; }
+        .btn-bruteforce { background-color: #ffc107; }
+        .btn-bruteforce:hover { background-color: #e0a800; }
+        .btn-xss { background-color: #28a745; }
+        .btn-xss:hover { background-color: #218838; }
+        .btn-beautify { background-color: rgb(248, 23, 181); }
+        .btn-beautify:hover { background-color: rgb(248, 23, 181); }
+        .btn-decrypt { background-color: #73ff17; }
+        .btn-decrypt:hover { background-color: #73ff17; }
+        /* New Small Box Style */
+        .protocol-box {
+            position: absolute;
+            top: 10%;
+            left: 2cm;
+            background-color: #666;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            overflow: auto;
+        }
+        .protocol-box h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .protocol-box input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .protocol-box button {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .protocol-box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>QuataExploit</h1>
+    <form action="/" method="POST">
+        <input type="text" name="target" placeholder="Enter target IP or Range" required>
+        <button type="submit">Scan</button>
+    </form>
+    {% if error %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+    {% if results %}
+        <h2>Scan Results</h2>
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>IP Address</th>
+                    <th>State</th>
+                    <th>OS</th>
+                    <th>Open Ports</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for host in results %}
+                    <tr>
+                        <td>{{ host.IP }}</td>
+                        <td>{{ host.State }}</td>
+                        <td>{{ host.OS }}</td>
+                        <td>
+                            <ul>
+                                {% for port in host['Open Ports'] %}
+                                    <li>Port {{ port.port }} - Service: {{ port.service }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif results is not none %}
+        <p class="loading">Scanning in progress...</p>
+    {% endif %}
+    <div class="action-buttons">
+        <div style="display: flex; justify-content: space-between; gap: 20px;">
+            <a href="/exploit/beautify/0" class="btn-action btn-beautify">Beautify</a>
+            <a href="/exploit/decrypt/0" class="btn-action btn-decrypt">Decrypt</a>
+            <a href="/exploit/dnsenumeration/0" class="btn-action btn-dnsenumeration">DnsEnumeration</a>
+        </div>
+        <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 20px;">
+            <a href="/exploit/bruteforce/0" class="btn-action btn-bruteforce">Brute Force</a>
+            <a href="/exploit/xss/0" class="btn-action btn-xss">XSS</a>
+            <a href="/exploit/direnumeration/0" class="btn-action btn-direnumeration">DirEnumeration</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2025 Pen Testing Tool</p>
+    </div>
+</div>
+<!-- Protocol Search Box -->
+<div class="protocol-box">
+    <h3>Search Protocol or Port</h3>
+    <form action="/protocol" method="POST">
+        <input type="text" name="protocol" placeholder="Enter Protocol or Port" required>
+        <button type="submit">Search</button>
+    </form>
+    {% if protocol_error %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ protocol_error }}
+        </div>
+    {% endif %}
+    {% if protocol_result %}
+        <h2>Protocol Search Result</h2>
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>Port/Protocol</th>
+                    <th>TCP Service/Port</th>
+                    <th>UDP Service/Port</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ protocol_result.get('Port', protocol_result.get('Protocol')) }}</td>
+                    <td>{{ protocol_result.get('TCP Service', protocol_result.get('TCP Port')) }}</td>
+                    <td>{{ protocol_result.get('UDP Service', protocol_result.get('UDP Port')) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautify JavaScript</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2f2f2f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        textarea {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #4CAF50;
+            width: 50%;
+            margin-right: 10px;
+            background-color: #333;
+            color: #fff;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #444;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Beautify JavaScript</h1>
+
+    <!-- Form for submitting raw JavaScript -->
+    <form method="POST">
+        <label for="raw_js">Enter JavaScript:</label>
+        <textarea id="raw_js" name="raw_js" rows="10" cols="50" placeholder="Paste your JavaScript here"></textarea>
+        <br>
+        <button type="submit">Beautify</button>
+    </form>
+
+    {% if beautified_js %}
+        <h2>Beautified JavaScript:</h2>
+        <pre>{{ beautified_js }}</pre>
+    {% elif error %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

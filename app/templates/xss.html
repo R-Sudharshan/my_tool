@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Exploit Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2f2f2f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        .result-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        .result-table th, .result-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .result-table th {
+            background-color: #333;
+        }
+        .result-table tr:nth-child(even) {
+            background-color: #444;
+        }
+        .result-table tr:hover {
+            background-color: #555;
+        }
+        .fetch-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .fetch-button:hover {
+            background-color: #45a049;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>XSS Exploit Results</h1>
+    {% if error %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+    {% if not db_name %}
+        <form action="{{ url_for('app_blueprint.exploit_xss', id=id) }}" method="POST">
+            <label for="url">Enter URL:</label>
+            <input type="text" id="url" name="url" class="form-control" placeholder="http://example.com" required>
+            <button type="submit" class="fetch-button">Submit</button>
+        </form>
+    {% else %}
+        <h2>Database: {{ db_name }}</h2>
+        <h3>Tables:</h3>
+        <ul>
+            {% for table in tables %}
+                <li>{{ table }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Columns:</h3>
+        <ul>
+            {% for column in columns %}
+                <li>{{ column }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Fetch Data:</h3>
+        <form action="{{ url_for('app_blueprint.fetch_data') }}" method="POST">
+            <input type="hidden" name="url" value="{{ url }}">
+            <label for="table">Table:</label>
+            <input type="text" id="table" name="table" class="form-control" placeholder="Enter table name" required>
+            <label for="column">Column:</label>
+            <input type="text" id="column" name="column" class="form-control" placeholder="Enter column name" required>
+            <button type="submit" class="fetch-button">Fetch Data</button>
+        </form>
+        {% if data %}
+            <div id="data-result">
+                <pre>{{ data | safe }}</pre>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+</body>
+</html>
